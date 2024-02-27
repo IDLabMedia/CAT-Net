@@ -16,7 +16,7 @@ from tqdm import tqdm
 import glob
 
 class arbitrary(AbstractDataset):
-    def __init__(self, crop_size, grid_crop, blocks: list, DCT_channels: int, tamp_list: str, read_from_jpeg=False):
+    def __init__(self, crop_size, grid_crop, blocks: list, DCT_channels: int, tamp_list: str, read_from_jpeg=False, single_file=False):
         """
         :param crop_size: (H,W) or None
         :param blocks:
@@ -24,7 +24,10 @@ class arbitrary(AbstractDataset):
         :param read_from_jpeg: F=from original extension, T=from jpeg compressed image
         """
         super().__init__(crop_size, grid_crop, blocks, DCT_channels)
-        self.tamp_list = list(glob.glob(tamp_list))
+        if single_file:
+            self.tamp_list = [tamp_list]
+        else:
+            self.tamp_list = list(glob.glob(tamp_list))
         self.read_from_jpeg = read_from_jpeg
 
     def get_tamp(self, index):

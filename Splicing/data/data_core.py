@@ -21,10 +21,11 @@ from Splicing.data.dataset_CASIA import CASIA
 # from Splicing.data.dataset_CoMoFoD import CoMoFoD
 # from Splicing.data.dataset_GRIP import GRIP
 from Splicing.data.dataset_arbitrary import arbitrary
+from project_config import dataset_paths
 
 
 class SplicingDataset(Dataset):
-    def __init__(self, crop_size, grid_crop, blocks=('RGB',), mode="train", DCT_channels=3, read_from_jpeg=False, class_weight=None):
+    def __init__(self, crop_size, grid_crop, blocks=('RGB',), mode="train", DCT_channels=3, read_from_jpeg=False, class_weight=None, filename=None):
         self.dataset_list = []
         if mode == "train":
             self.dataset_list.append(FantasticReality(crop_size, grid_crop, blocks, DCT_channels, "Splicing/data/FR_train_list.txt"))
@@ -50,6 +51,8 @@ class SplicingDataset(Dataset):
             # self.dataset_list.append(compRAISE(crop_size, grid_crop, blocks, DCT_channels, "Splicing/data/compRAISE_valid.txt"))
         elif mode == "arbitrary":
             self.dataset_list.append(arbitrary(crop_size, grid_crop, blocks, DCT_channels, "./input/*", read_from_jpeg=read_from_jpeg))
+        elif mode == "Single file":
+            self.dataset_list.append(arbitrary(crop_size, grid_crop, blocks, DCT_channels, filename, read_from_jpeg=read_from_jpeg, single_file=True))
         else:
             raise KeyError("Invalid mode: " + mode)
         if class_weight is None:

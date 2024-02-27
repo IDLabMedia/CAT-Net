@@ -112,7 +112,7 @@ def validate(config, testloader, model, writer_dict, valid_set="valid"):
             label = label.long().cuda()
 
             losses, pred = model(image, label, qtable)
-            pred = F.upsample(input=pred, size=(
+            pred = F.interpolate(input=pred, size=(
                         size[-2], size[-1]), mode='bilinear')
             loss = losses.mean()
             reduced_loss = reduce_tensor(loss)

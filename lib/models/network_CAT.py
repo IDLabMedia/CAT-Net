@@ -540,9 +540,9 @@ class CAT_Net(nn.Module):
 
         # Upsampling
         x0_h, x0_w = x[0].size(2), x[0].size(3)
-        x1 = F.upsample(x[1], size=(x0_h, x0_w), mode='bilinear')
-        x2 = F.upsample(x[2], size=(x0_h, x0_w), mode='bilinear')
-        x3 = F.upsample(x[3], size=(x0_h, x0_w), mode='bilinear')
+        x1 = F.interpolate(x[1], size=(x0_h, x0_w), mode='bilinear')
+        x2 = F.interpolate(x[2], size=(x0_h, x0_w), mode='bilinear')
+        x3 = F.interpolate(x[3], size=(x0_h, x0_w), mode='bilinear')
 
         x = torch.cat([x[0], x1, x2, x3], 1)
 
@@ -567,7 +567,8 @@ class CAT_Net(nn.Module):
             model_dict.update(loaded_dict)
             self.load_state_dict(model_dict)
         else:
-            logger.warning('=> Cannot load pretrained RGB')
+            #logger.warning('=> Cannot load pretrained RGB')
+            pass
         if os.path.isfile(pretrained_dct):
             loaded_dict = torch.load(pretrained_dct)['state_dict']
             model_dict = self.state_dict()
@@ -579,7 +580,8 @@ class CAT_Net(nn.Module):
             model_dict.update(loaded_dict)
             self.load_state_dict(model_dict)
         else:
-            logger.warning('=> Cannot load pretrained DCT')
+            #logger.warning('=> Cannot load pretrained DCT')
+            pass
 
 
 def get_seg_model(cfg, **kwargs):
